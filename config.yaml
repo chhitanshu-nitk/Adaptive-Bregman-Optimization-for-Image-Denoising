@@ -1,0 +1,53 @@
+experiment:
+  name: "Bregman_nmPPMDC_7Penalty_Ablation"
+  seed: 42
+  device: "cpu"
+
+dataset:
+  name: "BSD68"
+  raw_dir: "data/raw/BSD68"
+  max_images: 3  # Set to null or integer to evaluate across images
+
+noise:
+  type: "gaussian"
+  sigma: 25.0  # Gaussian noise std in [0, 255] (normalized variance ~ 0.0096)
+
+model:
+  mu: 12.0     # Balances data fidelity and TV penalty for sigma=25 (paper Table 2)
+  tau: 0.35    # DC component parameter (paper Table 1 & 2)
+  beta: 8.0    # Edge sensitivity in adaptive weight: w = 1 / (1 + beta * ||grad u||^2)
+  epsilon: 1.0e-6
+
+penalties:
+  - "atan"
+  - "log"
+  - "mcp"
+  - "scad"
+  - "geman"
+  - "fractional"
+  - "capped_l1"
+
+optimizer:
+  max_iter: 50         # Outer iterations
+  tol: 5.0e-4          # Validated stopping tolerance
+  rho: 1.0             # Strongly convex parameter
+  zeta: 0.09           # Non-monotone contraction factor
+  t0: 0.7              # Validated initial search step size (paper Table 1 & 2)
+  nu: 1000.0           # Non-monotone sequence scale
+  ck: 1.0              # Proximal parameter
+  max_ls_iter: 25      # Max Armijo backtracking reductions
+  max_inner_iter: 30   # FGP inner iterations
+  inner_tol: 1.0e-4
+
+bregman:
+  modes:
+    - "euclidean"
+    - "adaptive"
+  beta_adaptive: 8.0   # Validated optimal beta
+  epsilon_w: 0.05      # Validated weight clipping limit
+
+output:
+  base_dir: "results"
+  save_images: true
+  save_metrics: true
+  save_plots: true
