@@ -1,5 +1,0 @@
-torch>=2.0
-numpy>=1.24
-scikit-image>=0.20
-matplotlib>=3.7
-PyYAML>=6.0
